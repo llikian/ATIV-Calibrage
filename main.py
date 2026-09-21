@@ -10,9 +10,16 @@ from config import (
     MAX_WINDOW_DIMENSION,
     PLAYBACK_FPS_OVERRIDE,
 )
-from optitrack_viewer.dataset import DatasetError, OptiTrackDataset
+from optitrack_viewer.dataset import DatasetError, OptiTrackDataset, Detection2D
 from optitrack_viewer.viewer import MainWindow
 
+def est_collineaire(a : Detection2D, b: Detection2D, c:Detection2D) -> bool:
+    return abs((b.x - a.x) * (c.x - a.x) + (b.y - a.y) * (c.y - a.y)) > 1.0 - 1e-5
+
+def question1_1() :
+    
+
+    pass
 
 def main() -> int:
     app = QApplication(sys.argv)
@@ -23,6 +30,9 @@ def main() -> int:
             DATASET_DIRECTORY,
             fps_override=PLAYBACK_FPS_OVERRIDE,
         )
+        
+        
+
     except (DatasetError, OSError) as exc:
         QMessageBox.critical(
             None,
