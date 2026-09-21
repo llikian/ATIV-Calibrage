@@ -1,4 +1,5 @@
 from __future__ import annotations
+from utils import *
 
 import sys
 
@@ -13,12 +14,8 @@ from config import (
 from optitrack_viewer.dataset import DatasetError, OptiTrackDataset, Detection2D
 from optitrack_viewer.viewer import MainWindow
 
-def est_collineaire(a : Detection2D, b: Detection2D, c:Detection2D) -> bool:
-    return abs((b.x - a.x) * (c.x - a.x) + (b.y - a.y) * (c.y - a.y)) > 1.0 - 1e-5
 
-def question1_1() :
-    
-
+def question1_1():
     pass
 
 def main() -> int:
