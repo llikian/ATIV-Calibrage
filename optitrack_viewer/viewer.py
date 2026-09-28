@@ -78,9 +78,9 @@ class CameraView(QWidget):
         triplets = get_potential_triplets(self.frame)
 
         for triplet in triplets:
-            x1 =int( offset_x + triplet[0].pos.x * scale)
+            x1 = int( offset_x + triplet[0].pos.x * scale)
             y1 = int(offset_y + triplet[0].pos.y * scale)
-            x2 =int( offset_x + triplet[2].pos.x * scale)
+            x2 = int( offset_x + triplet[2].pos.x * scale)
             y2 = int(offset_y + triplet[2].pos.y * scale)
             painter.drawLine(x1, y1, x2, y2)
 
