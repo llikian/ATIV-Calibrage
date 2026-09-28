@@ -70,19 +70,17 @@ class CameraView(QWidget):
             painter.drawLine(xi - h, yi, xi + h, yi)
             painter.drawLine(xi, yi - h, xi, yi + h)
 
-        painter.setPen(QPen(QColor(230, 0, 0), 3))
-
-
-
         # NOTRE CODE ICI
+        painter.setPen(QPen(QColor(0, 255, 255), 3))
         triplets = get_potential_triplets(self.frame)
 
         for triplet in triplets:
-            x1 = int( offset_x + triplet[0].pos.x * scale)
-            y1 = int(offset_y + triplet[0].pos.y * scale)
-            x2 = int( offset_x + triplet[2].pos.x * scale)
-            y2 = int(offset_y + triplet[2].pos.y * scale)
-            painter.drawLine(x1, y1, x2, y2)
+            painter.drawLine(
+                int(offset_x + triplet[0].pos.x * scale),
+                int(offset_y + triplet[0].pos.y * scale),
+                int(offset_x + triplet[2].pos.x * scale),
+                int(offset_y + triplet[2].pos.y * scale),
+            )
 
         # NOTRE CODE ICI
 
@@ -182,9 +180,14 @@ class MainWindow(QMainWindow):
         # sans jamais dépasser les limites demandées.
         target_cell_ratio = 1280 / 1024
         header_h = 42
-        width_from_height = int((max_h - header_h) * self.grid_columns * target_cell_ratio / self.grid_rows)
+        width_from_height = int(
+            (max_h - header_h) * self.grid_columns * target_cell_ratio / self.grid_rows
+        )
         width = min(max_w, max(700, width_from_height))
-        height_from_width = int(width * self.grid_rows / (self.grid_columns * target_cell_ratio)) + header_h
+        height_from_width = (
+            int(width * self.grid_rows / (self.grid_columns * target_cell_ratio))
+            + header_h
+        )
         height = min(max_h, max(520, height_from_width))
         self.resize(min(width, hard_max), min(height, hard_max))
 
@@ -201,7 +204,9 @@ class MainWindow(QMainWindow):
         current_display = self.current_index + 1
         total = self.dataset.frame_count
         state = "PAUSE" if self.paused else "PLAY"
-        self.frame_label.setText(f"frame {current_display:05d}/{total:05d}    [{state}]")
+        self.frame_label.setText(
+            f"frame {current_display:05d}/{total:05d}    [{state}]"
+        )
 
         for view, camera in zip(self.camera_views, self.dataset.cameras):
             frame = camera.frames.get(sync_id, CameraFrame(present=False))
