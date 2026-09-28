@@ -1,3 +1,4 @@
 env.py
 __pycache__
 optitrack_viewer/__pycache__
+venv/
