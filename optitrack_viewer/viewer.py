@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import math
 from typing import List
+from utils import *
 
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QColor, QFont, QKeyEvent, QPainter, QPen
@@ -62,16 +63,32 @@ class CameraView(QWidget):
         painter.setPen(QPen(QColor(255, 255, 255), 1))
         h = self.cross_half_size_px
         for detection in self.frame.detections:
-            x = offset_x + detection.x * scale
-            y = offset_y + detection.y * scale
+            x = offset_x + detection.pos.x * scale
+            y = offset_y + detection.pos.y * scale
             xi = int(round(x))
             yi = int(round(y))
             painter.drawLine(xi - h, yi, xi + h, yi)
             painter.drawLine(xi, yi - h, xi, yi + h)
 
+        painter.setPen(QPen(QColor(230, 0, 0), 3))
+
+
+
+        # NOTRE CODE ICI
+        triplets = get_potential_triplets(self.frame)
+
+        for triplet in triplets:
+            x1 =int( offset_x + triplet[0].pos.x * scale)
+            y1 = int(offset_y + triplet[0].pos.y * scale)
+            x2 =int( offset_x + triplet[2].pos.x * scale)
+            y2 = int(offset_y + triplet[2].pos.y * scale)
+            painter.drawLine(x1, y1, x2, y2)
+
+        # NOTRE CODE ICI
+
         # Bandeau de texte dans chaque vue.
         painter.setFont(QFont("Consolas", 9))
-        painter.setPen(QColor(230, 230, 230))
+        painter.setPen(QPen(QColor(230, 230, 230), 1))
         serial = self.camera.info.serial
         camera_text = f"Camera {self.camera.info.index:02d}  serial {serial}"
         painter.drawText(8, 17, camera_text)

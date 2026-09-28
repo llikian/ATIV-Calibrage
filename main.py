@@ -11,12 +11,14 @@ from config import (
     MAX_WINDOW_DIMENSION,
     PLAYBACK_FPS_OVERRIDE,
 )
-from optitrack_viewer.dataset import DatasetError, OptiTrackDataset, Detection2D
+from optitrack_viewer.dataset import (
+    DatasetError,
+    OptiTrackDataset,
+    Detection2D,
+    CameraFrame,
+)
 from optitrack_viewer.viewer import MainWindow
 
-
-def question1_1():
-    pass
 
 def main() -> int:
     app = QApplication(sys.argv)
@@ -27,8 +29,9 @@ def main() -> int:
             DATASET_DIRECTORY,
             fps_override=PLAYBACK_FPS_OVERRIDE,
         )
-        
-        
+
+        print("cameras: ", dataset.camera_count)
+        print("frames: ", dataset.frame_count)
 
     except (DatasetError, OSError) as exc:
         QMessageBox.critical(

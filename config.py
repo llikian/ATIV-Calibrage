@@ -1,10 +1,6 @@
-from pathlib import Path
+from env import ENV_DATASET_DIRECTORY
 
-# -----------------------------------------------------------------------------
-# A MODIFIER : chemin ABSOLU Windows du dossier d'un dataset OptiTrack.
-# Exemple : Path(r"D:\TP_OptiTrack\datasets\wand_mobile_30s_01")
-# -----------------------------------------------------------------------------
-DATASET_DIRECTORY = Path(r"/home/llikian/classes/M2/ativ/guillou/Datasets/wand-A-013")
+DATASET_DIRECTORY = ENV_DATASET_DIRECTORY
 
 # La fenêtre ne dépassera jamais cette taille dans une dimension.
 MAX_WINDOW_DIMENSION = 1280

@@ -6,7 +6,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Tuple
-
+from vec2 import vec2
 
 _CAMERA_FILE_RE = re.compile(
     r"^camera_(?P<index>\d+)_serial_(?P<serial>\d+)_(?P<kind>frames|objects)\.csv$",
@@ -16,8 +16,7 @@ _CAMERA_FILE_RE = re.compile(
 
 @dataclass(frozen=True)
 class Detection2D:
-    x: float
-    y: float
+    pos: vec2
     object_index: Optional[int] = None
 
 
@@ -73,7 +72,9 @@ class OptiTrackDataset:
         return self.sync_group_ids[frame_index]
 
     @classmethod
-    def load(cls, directory: Path, fps_override: Optional[float] = None) -> "OptiTrackDataset":
+    def load(
+        cls, directory: Path, fps_override: Optional[float] = None
+    ) -> "OptiTrackDataset":
         directory = directory.expanduser()
         if not directory.is_dir():
             raise DatasetError(f"Le dossier du dataset n'existe pas : {directory}")
@@ -99,9 +100,13 @@ class OptiTrackDataset:
             frame_path = entry.get("frames")
             object_path = entry.get("objects")
             if frame_path is None:
-                raise DatasetError(f"Fichier frames.csv manquant pour la caméra {camera_index}")
+                raise DatasetError(
+                    f"Fichier frames.csv manquant pour la caméra {camera_index}"
+                )
             if object_path is None:
-                raise DatasetError(f"Fichier objects.csv manquant pour la caméra {camera_index}")
+                raise DatasetError(
+                    f"Fichier objects.csv manquant pour la caméra {camera_index}"
+                )
 
             _load_camera_frames(frame_path, camera.frames, all_sync_ids)
             _load_camera_objects(object_path, camera.frames, all_sync_ids)
@@ -262,7 +267,9 @@ def _load_camera_objects(
 
             all_sync_ids.add(sync_id)
             frame = destination.setdefault(sync_id, CameraFrame(present=True))
-            frame.detections.append(Detection2D(x=x, y=y, object_index=object_index))
+            frame.detections.append(
+                Detection2D(pos=vec2(x, y), object_index=object_index)
+            )
 
     # Si object_count n'est pas fiable/présent, la liste d'objets est la référence visuelle.
     for frame in destination.values():
